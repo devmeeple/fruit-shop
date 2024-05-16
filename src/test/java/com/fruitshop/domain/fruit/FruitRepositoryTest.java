@@ -1,6 +1,5 @@
 package com.fruitshop.domain.fruit;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +15,7 @@ class FruitRepositoryTest {
     @Autowired
     FruitRepository fruitRepository;
 
-    @AfterEach
-    void tearDown() {
-        fruitRepository.deleteAll();
-    }
-
+    // 각 테스트가 끝나고 롤백을 해준다. AfterEach 저장소. deleteAll 필요 없음.
     @DisplayName("상품을 추가한다")
     @Test
     void save() {
@@ -61,5 +56,59 @@ class FruitRepositoryTest {
 
         // then
         assertThat(count).isEqualTo(1);
+    }
+
+    @DisplayName("판매되지 않은 특정 금액이상(GTE)의 상품을 조회한다")
+    @Test
+    void findAllByPriceGreaterThanEqual() {
+        // given
+        String name = "사과";
+        long basePrice = 3000;
+        long greaterThanEqualPrice = 5000;
+        long lessThanEqualPrice = 2000;
+
+        fruitRepository.save(Fruit.builder()
+                .name(name)
+                .price(greaterThanEqualPrice)
+                .build());
+
+        fruitRepository.save(Fruit.builder()
+                .name(name)
+                .price(lessThanEqualPrice)
+                .build());
+
+        // when
+        List<Fruit> fruitList = fruitRepository.findAllByPriceGreaterThanEqual(basePrice);
+
+        // then
+        assertThat(fruitList.size()).isEqualTo(1);
+        assertThat(fruitList.get(0).getName()).isEqualTo("사과");
+        assertThat(fruitList.get(0).getPrice()).isEqualTo(5000);
+    }
+
+    @DisplayName("판매되지 않은 특정 금액이하(LTE)의 상품을 조회한다")
+    @Test
+    void findAllByPriceLessThanEqual() {
+        // given
+        String name = "사과";
+        long basePrice = 3000;
+        long gtePrice = 5000;
+        long ltePrice = 2000;
+
+        fruitRepository.save(Fruit.builder()
+                .name(name)
+                .price(gtePrice)
+                .build());
+
+        fruitRepository.save(Fruit.builder()
+                .name(name)
+                .price(ltePrice)
+                .build());
+
+        // when
+        List<Fruit> fruitList = fruitRepository.findAllByPriceLessThanEqual(basePrice);
+
+        // then
+        assertThat(fruitList.size()).isEqualTo(1);
     }
 }

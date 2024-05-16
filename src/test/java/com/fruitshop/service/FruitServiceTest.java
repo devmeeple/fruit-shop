@@ -2,6 +2,7 @@ package com.fruitshop.service;
 
 import com.fruitshop.domain.fruit.Fruit;
 import com.fruitshop.domain.fruit.FruitRepository;
+import com.fruitshop.domain.fruit.PriceComparison;
 import com.fruitshop.web.dto.FruitAddRequestDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -103,5 +104,59 @@ class FruitServiceTest {
 
         // then
         assertThat(count).isEqualTo(1);
+    }
+
+    @DisplayName("판매되지 않은 특정 금액이상(GTE)의 상품을 조회한다")
+    @Test
+    void findAllByComparisonAndPrice() {
+        // given
+        String name = "사과";
+        long basePrice = 3000;
+        long greaterThanEqualPrice = 5000;
+        long lessThanEqualPrice = 2000;
+
+        fruitRepository.save(Fruit.builder()
+                .name(name)
+                .price(greaterThanEqualPrice)
+                .build());
+
+        fruitRepository.save(Fruit.builder()
+                .name(name)
+                .price(lessThanEqualPrice)
+                .build());
+
+        // when
+        List<Fruit> result = fruitService.findAllByComparisonAndPrice(PriceComparison.GTE, basePrice);
+
+        // then
+        assertThat(result.size()).isEqualTo(1);
+        assertThat(result.get(0).getPrice()).isEqualTo(greaterThanEqualPrice);
+    }
+
+    @DisplayName("판매되지 않은 특정 금액이하(LTE)의 상품을 조회한다")
+    @Test
+    void findAllByComparisonAndPrice2() {
+        // given
+        String name = "사과";
+        long basePrice = 3000;
+        long greaterThanEqualPrice = 5000;
+        long lessThanEqualPrice = 2000;
+
+        fruitRepository.save(Fruit.builder()
+                .name(name)
+                .price(greaterThanEqualPrice)
+                .build());
+
+        fruitRepository.save(Fruit.builder()
+                .name(name)
+                .price(lessThanEqualPrice)
+                .build());
+
+        // when
+        List<Fruit> result = fruitService.findAllByComparisonAndPrice(PriceComparison.LTE, basePrice);
+
+        // then
+        assertThat(result.size()).isEqualTo(1);
+        assertThat(result.get(0).getPrice()).isEqualTo(lessThanEqualPrice);
     }
 }
