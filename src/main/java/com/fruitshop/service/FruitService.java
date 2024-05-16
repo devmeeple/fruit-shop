@@ -31,4 +31,16 @@ public class FruitService {
         fruit.changeSoldStatus();
 //        fruitRepository.save(fruit); // 없어도 되는 코드(영속성)
     }
+
+    /**
+     * 과일이름을 기준으로 판매된 금액, 미판매된 금액을 조회한다
+     */
+
+    /**
+     * 과일이름을 기준으로 상품개수를 조회한다
+     */
+    public Long countByName(String name) {
+        return fruitRepository.countByName(name);
+    }
 }
+

@@ -43,4 +43,23 @@ class FruitRepositoryTest {
         assertThat(fruit.getPrice()).isEqualTo(price);
         assertThat(fruit.isSold()).isFalse();
     }
+
+    @DisplayName("과일이름을 기준으로 상품개수를 조회한다")
+    @Test
+    void countByName() {
+        // given
+        String name = "사과";
+        long price = 5000;
+
+        fruitRepository.save(Fruit.builder()
+                .name(name)
+                .price(price)
+                .build());
+
+        // when
+        Long count = fruitRepository.countByName(name);
+
+        // then
+        assertThat(count).isEqualTo(1);
+    }
 }
