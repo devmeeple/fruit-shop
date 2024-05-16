@@ -38,5 +38,8 @@ public class Fruit {
         this.isSold = false; // 기본값 설정
     }
 
-    /** 상품이 판매되었다 */
+    // 상품이 판매되었다 //
+    public void changeSoldStatus() {
+        this.isSold = true;
+    }
 }

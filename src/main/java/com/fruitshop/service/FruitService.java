@@ -1,5 +1,6 @@
 package com.fruitshop.service;
 
+import com.fruitshop.domain.fruit.Fruit;
 import com.fruitshop.domain.fruit.FruitRepository;
 import com.fruitshop.web.dto.FruitAddRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -19,5 +20,15 @@ public class FruitService {
     @Transactional
     public void save(FruitAddRequestDto request) {
         fruitRepository.save(request.toEntity());
+    }
+
+    /**
+     * 상품의 판매상태를 수정한다
+     */
+    @Transactional
+    public void findById(Long id) {
+        Fruit fruit = fruitRepository.findById(id).orElseThrow(() -> new IllegalArgumentException(id + "에 해당하는 과일을 찾을 수 없습니다"));
+        fruit.changeSoldStatus();
+//        fruitRepository.save(fruit); // 없어도 되는 코드(영속성)
     }
 }
