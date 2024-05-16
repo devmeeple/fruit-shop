@@ -36,3 +36,27 @@
   "notSalesAmount": 4000
 }
 ```
+
+## 개발
+
+### 개발순서
+
+- 서비스, 리포지토리 -> 테스트 검증 -> 웹 계층
+
+### @Builder를 왜 사용하나요?
+
+생성자로 객체를 생성해도 되는데 왜 `@Builder`를 사용했는지에 대해
+
+- 가독성을 높이고 사람에 의한 실수를 줄여줌: 생성자 파라미터가 많아지면 가독성이 떨어짐
+- 필요한 데이터만 설정할 수 있고 코드가 줄어듦(값 생성에 유연함)
+- **객체의 불변성**
+
+요약: 유지보수에 도움 됨
+
+### RestTemplate VS MockMvc
+
+- 어떤 관점에서 테스트 하냐에 따라 다르다
+
+### 예외 테스트
+
+- [AssertJ Exception Assertions by Baeldung](https://www.baeldung.com/assertj-exception-assertion)
