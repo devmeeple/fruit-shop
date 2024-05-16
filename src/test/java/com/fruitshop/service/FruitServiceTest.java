@@ -69,6 +69,40 @@ class FruitServiceTest {
         assertThat(fruit.isSold()).isTrue();
     }
 
+    @DisplayName("과일이름을 기준으로 판매금액, 미판매금액을 조회한다")
+    @Test
+    void findSalesAmountByName() {
+        // given
+        String name = "사과";
+        long price = 3000;
+
+        Fruit fruit1 = fruitRepository.save(Fruit.builder()
+                .name(name)
+                .price(price)
+                .build());
+
+        fruitRepository.save(Fruit.builder()
+                .name(name)
+                .price(4000)
+                .build());
+
+        Fruit fruit3 = fruitRepository.save(Fruit.builder()
+                .name(name)
+                .price(price)
+                .build());
+
+        fruit1.changeSoldStatus();
+        fruit3.changeSoldStatus();
+
+        // when
+        Long salesAmount = fruitService.findSalesAmountByName(name).getSalesAmount();
+        Long notSalesAmount = fruitService.findSalesAmountByName(name).getNotSalesAmount();
+
+        // then
+        assertThat(salesAmount).isEqualTo(6000);
+        assertThat(notSalesAmount).isEqualTo(4000);
+    }
+
     @DisplayName("존재하지 않는 상품을 조회하면 에러가 발생한다")
     @Test
     void findByIdException() {

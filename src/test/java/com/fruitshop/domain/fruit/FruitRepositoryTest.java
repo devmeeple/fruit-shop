@@ -39,6 +39,46 @@ class FruitRepositoryTest {
         assertThat(fruit.isSold()).isFalse();
     }
 
+    @DisplayName("판매금액을 조회한다")
+    @Test
+    void salesAmountByName() {
+        // given
+        String name = "사과";
+        long price = 5000;
+
+        Fruit fruit = fruitRepository.save(Fruit.builder()
+                .name(name)
+                .price(price)
+                .build());
+
+        fruit.changeSoldStatus();
+
+        // when
+        Long salesAmount = fruitRepository.salesAmountByName(name).orElse(0L);
+
+        // then
+        assertThat(salesAmount).isEqualTo(5000);
+    }
+
+    @DisplayName("미판매금액을 조회한다")
+    @Test
+    void notSalesAmountByName() {
+        // given
+        String name = "사과";
+        long price = 5000;
+
+        fruitRepository.save(Fruit.builder()
+                .name(name)
+                .price(price)
+                .build());
+
+        // when
+        Long notSalesAmount = fruitRepository.notSalesAmountByName(name).orElse(0L);
+
+        // then
+        assertThat(notSalesAmount).isEqualTo(5000);
+    }
+
     @DisplayName("과일이름을 기준으로 상품개수를 조회한다")
     @Test
     void countByName() {

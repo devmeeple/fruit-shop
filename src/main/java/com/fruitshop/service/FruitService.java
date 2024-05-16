@@ -5,6 +5,7 @@ import com.fruitshop.domain.fruit.FruitRepository;
 import com.fruitshop.domain.fruit.PriceComparison;
 import com.fruitshop.web.dto.FruitAddRequestDto;
 import com.fruitshop.web.dto.FruitListResponseDto;
+import com.fruitshop.web.dto.FruitSalesAmountResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +41,15 @@ public class FruitService {
     /**
      * 과일이름을 기준으로 판매금액, 미판매금액을 조회한다
      */
+    public FruitSalesAmountResponseDto findSalesAmountByName(String name) {
+        Long salesAmount = fruitRepository.salesAmountByName(name).orElse(0L);
+        Long notSalesAmount = fruitRepository.notSalesAmountByName(name).orElse(0L);
+
+        return FruitSalesAmountResponseDto.builder()
+                .salesAmount(salesAmount)
+                .notSalesAmount(notSalesAmount)
+                .build();
+    }
 
     /**
      * 과일이름을 기준으로 상품개수를 조회한다
@@ -54,7 +64,7 @@ public class FruitService {
      */
     public List<FruitListResponseDto> findAllByComparisonAndPrice(PriceComparison comparison, long price) {
         List<Fruit> fruits;
-        
+
         if (comparison == PriceComparison.GTE) {
             fruits = fruitRepository.findAllByPriceGreaterThanEqual(price);
         } else {
