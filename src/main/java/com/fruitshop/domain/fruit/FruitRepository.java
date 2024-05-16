@@ -7,6 +7,12 @@ import java.util.List;
 public interface FruitRepository extends JpaRepository<Fruit, Long> {
 
     /**
+     * 4.3
+     * 과일이름을 기준으로 판매금액을 조회한다
+     * 과일이름을 기준으로 미판매금액을 조회한다
+     */
+
+    /**
      * 과일이름을 기준으로 상품개수를 조회한다
      */
     Long countByName(String name);
