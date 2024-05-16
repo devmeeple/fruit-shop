@@ -4,6 +4,7 @@ import com.fruitshop.domain.fruit.Fruit;
 import com.fruitshop.domain.fruit.FruitRepository;
 import com.fruitshop.domain.fruit.PriceComparison;
 import com.fruitshop.web.dto.FruitAddRequestDto;
+import com.fruitshop.web.dto.FruitListResponseDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,7 +127,7 @@ class FruitServiceTest {
                 .build());
 
         // when
-        List<Fruit> result = fruitService.findAllByComparisonAndPrice(PriceComparison.GTE, basePrice);
+        List<FruitListResponseDto> result = fruitService.findAllByComparisonAndPrice(PriceComparison.GTE, basePrice);
 
         // then
         assertThat(result.size()).isEqualTo(1);
@@ -153,7 +154,7 @@ class FruitServiceTest {
                 .build());
 
         // when
-        List<Fruit> result = fruitService.findAllByComparisonAndPrice(PriceComparison.LTE, basePrice);
+        List<FruitListResponseDto> result = fruitService.findAllByComparisonAndPrice(PriceComparison.LTE, basePrice);
 
         // then
         assertThat(result.size()).isEqualTo(1);

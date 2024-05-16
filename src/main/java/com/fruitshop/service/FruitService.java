@@ -4,11 +4,13 @@ import com.fruitshop.domain.fruit.Fruit;
 import com.fruitshop.domain.fruit.FruitRepository;
 import com.fruitshop.domain.fruit.PriceComparison;
 import com.fruitshop.web.dto.FruitAddRequestDto;
+import com.fruitshop.web.dto.FruitListResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true) // 조회시 성능이점, 쓰기는 false
@@ -48,13 +50,20 @@ public class FruitService {
 
     /**
      * 판매되지 않은 특정 금액이상 또는 특정금액 이하의 상품목록을 조회한다
+     * 리팩터링이 필요해보임 만족스럽지 않음
      */
-    public List<Fruit> findAllByComparisonAndPrice(PriceComparison comparison, long price) {
+    public List<FruitListResponseDto> findAllByComparisonAndPrice(PriceComparison comparison, long price) {
+        List<Fruit> fruits;
+        
         if (comparison == PriceComparison.GTE) {
-            return fruitRepository.findAllByPriceGreaterThanEqual(price);
+            fruits = fruitRepository.findAllByPriceGreaterThanEqual(price);
+        } else {
+            fruits = fruitRepository.findAllByPriceLessThanEqual(price);
         }
 
-        return fruitRepository.findAllByPriceLessThanEqual(price);
+        return fruits.stream()
+                .map(Fruit::toDto)
+                .collect(Collectors.toList());
     }
 }
 

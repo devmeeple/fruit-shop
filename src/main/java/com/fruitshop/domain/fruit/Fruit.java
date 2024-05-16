@@ -1,5 +1,6 @@
 package com.fruitshop.domain.fruit;
 
+import com.fruitshop.web.dto.FruitListResponseDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -41,5 +42,13 @@ public class Fruit {
     // 상품이 판매되었다 //
     public void changeSoldStatus() {
         this.isSold = true;
+    }
+
+    public FruitListResponseDto toDto() {
+        return FruitListResponseDto.builder().
+                name(name).
+                warehousingDate(warehousingDate).
+                price(price).
+                build();
     }
 }
