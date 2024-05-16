@@ -86,6 +86,34 @@ class FruitApiControllerTest {
         assertThat(fruit.isSold()).isTrue();
     }
 
+    @DisplayName("과일이름을 기준으로 판매금액, 미판매금액을 조회한다")
+    @Test
+    void findSalesAmountByName() throws Exception {
+        // given
+        String apple = "사과";
+
+        Fruit fruit1 = fruitRepository.save(Fruit.builder().name(apple).price(3000).build());
+        fruitRepository.save(Fruit.builder().name(apple).price(4000).build());
+        Fruit fruit2 = fruitRepository.save(Fruit.builder().name(apple).price(3000).build());
+
+        fruit1.changeSoldStatus();
+        fruit2.changeSoldStatus();
+
+        fruitRepository.save(fruit1);
+        fruitRepository.save(fruit2);
+
+        // when
+        mockMvc.perform(get("/api/v1/fruit/stat?name={name}", apple))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.salesAmount").value(6000))
+                .andExpect(jsonPath("$.notSalesAmount").value(4000))
+                .andDo(print());
+
+        // then
+        assertThat(fruitRepository.salesAmountByName(apple).orElse(0L)).isEqualTo(6000);
+        assertThat(fruitRepository.notSalesAmountByName(apple).orElse(0L)).isEqualTo(4000);
+    }
+
     @DisplayName("과일이름을 기준으로 상품개수를 조회한다")
     @Test
     void countByName() throws Exception {

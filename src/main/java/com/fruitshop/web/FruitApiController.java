@@ -5,6 +5,7 @@ import com.fruitshop.service.FruitService;
 import com.fruitshop.web.dto.FruitAddRequestDto;
 import com.fruitshop.web.dto.FruitCountResponseDto;
 import com.fruitshop.web.dto.FruitListResponseDto;
+import com.fruitshop.web.dto.FruitSalesAmountResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,6 +36,16 @@ public class FruitApiController {
     @PutMapping("/api/v1/fruit")
     public void changeSoldStatus(@RequestBody Long id) {
         fruitService.findById(id);
+    }
+
+    /**
+     * 과일이름을 기준으로 판매금액, 미판매금액을 조회한다
+     * 요청: { name: String }
+     * 응답: { salesAmount: long, notSalesAmount: long }
+     */
+    @GetMapping("/api/v1/fruit/stat")
+    public FruitSalesAmountResponseDto findSalesAmountByName(@RequestParam String name) {
+        return fruitService.findSalesAmountByName(name);
     }
 
     /**
